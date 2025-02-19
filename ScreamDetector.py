@@ -1,11 +1,21 @@
-# scream_detection.py
+'''
+ScreamDetector.py 
+
+This is the standalone file which uses the ONNX model to classify
+the given audio file and label it as 'Scream Detected' or 'Scream Not Detected'
+
+This file also serves as a scream detection library which is accessed by
+the server (server.py) and the cli (screamDetector_cli.py)
+
+This file has a sample test code and can be directly run as
+python ScreamDetector.py
+'''
 
 import numpy as np
 import librosa
 from sklearn.preprocessing import LabelEncoder
 from tensorflow.keras.utils import to_categorical
 import onnxruntime as ort
-#from IPython.display import display, Audio
 import os
 
 class ScreamDetector:
@@ -16,7 +26,7 @@ class ScreamDetector:
         """
         self.model_name = model_name
         self.label_encoder = LabelEncoder()
-        self.label_encoder.fit([0, 1])  # 0 for non-scream, 1 for scream
+        self.label_encoder.fit([0, 1])  # 0 for no-scream, 1 for scream
         self.onnx_model = self._load_onnx_model()
 
     def _load_onnx_model(self):
@@ -61,7 +71,7 @@ class ScreamDetector:
         # Run the ONNX model
         outputs = self.onnx_model.run(None, {"args_0": feature})
 
-        # Display the audio for playback
+        # Display the audio for playback (Not really needed for rescue-box)
         #display(Audio(file_path))
 
         # Handle empty outputs
@@ -81,7 +91,9 @@ class ScreamDetector:
         """
         outputs = []
 
+        #Mapping the labels into classes
         label_mapping = {0: "Scream Not Detected", 1: "Scream Detected"}
+
         # Loop over all files in the directory
         for file_name in os.listdir(directory):
             file_path = os.path.join(directory, file_name)
@@ -89,14 +101,17 @@ class ScreamDetector:
             if file_path.endswith(".wav"):
                 # Predict the label for the audio file
                 predicted_label = self.predict_audio(file_path)
-
                 string_label = label_mapping.get(predicted_label, "Unknown") 
 
-                # Append as a dictionary instead of a tuple
+                # Append as a dictionary which helps in organizing the directory output
                 outputs.append({"Audio_path": directory+'/'+file_name, "prediction": string_label})  
         return outputs
 
-
+'''
+This portion is the test code to see how this prediction model works using the onnx model
+There are three main test cases, the first two are for single audio input
+The last test case is for a directory input, it will classify all .wav files in the given filepath
+'''
 def main():
     # Initialize the scream detector
     detector = ScreamDetector()
