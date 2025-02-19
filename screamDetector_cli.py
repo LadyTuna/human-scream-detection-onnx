@@ -1,38 +1,19 @@
 '''
-import onnxruntime as ort
-import numpy as np
-from structured_code import ScreamDetector
-import argparse
-from pathlib import Path
-import json
-from pprint import pprint
+scremDetector_cli.py
 
-# Arguments
-parser = argparse.ArgumentParser()
-parser.add_argument("--input_dir", type=str, required=True)
-parser.add_argument("--output_dir", type=str, required=True)
-args = parser.parse_args()
-input_dir = Path(args.input_dir)
-output_dir = Path(args.output_dir)
-output_dir.mkdir(parents=True, exist_ok=True)
+This code is to run the Scream Detection model on the terminal 
+using command line inputs. The correct input format is
 
-
-model = ScreamDetector('scream_detection_model.onnx')
-outputs = model.predict_audio_dir(input_dir)
-pprint(outputs)
-with open(output_dir / "output.json", "w") as f:
-    json.dump(outputs, f)
-
+python screamDetector_cli.py --input_dir <input files directory> --output_dir <output destination directory>
 '''
 import onnxruntime as ort
 import numpy as np
-from structured_code import ScreamDetector
+from ScreamDetector import ScreamDetector
 import argparse
 from pathlib import Path
 import csv
 from pprint import pprint
 
-# Custom function to convert numpy types to native Python types
 def convert_to_serializable(obj):
     if isinstance(obj, np.ndarray):
         return obj.tolist()  # Convert numpy array to a regular list
@@ -41,7 +22,9 @@ def convert_to_serializable(obj):
     return obj  # If it's a regular type, just return it as is
 
 # Arguments
-parser = argparse.ArgumentParser()
+parser = argparse.ArgumentParser(
+    description="Run the Scream Detection model on audio files in the INPUT_DIR and save the predictions to a CSV file."
+)
 parser.add_argument("--input_dir", type=str, required=True)
 parser.add_argument("--output_dir", type=str, required=True)
 args = parser.parse_args()
@@ -50,7 +33,7 @@ input_dir = Path(args.input_dir)
 output_dir = Path(args.output_dir)
 output_dir.mkdir(parents=True, exist_ok=True)
 
-# Initialize model
+# Initialize the scream detection model
 model = ScreamDetector('scream_detection_model.onnx')
 
 # Get predictions
