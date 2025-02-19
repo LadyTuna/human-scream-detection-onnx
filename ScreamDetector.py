@@ -2,7 +2,7 @@
 ScreamDetector.py 
 
 This is the standalone file which uses the ONNX model to classify
-the given audio file and label it as 'Scream Detected' or 'No Scream Detected'
+the given audio file and label it as 'Scream Detected' or 'Scream Not Detected'
 
 This file also serves as a scream detection library which is accessed by
 the server (server.py) and the cli (screamDetector_cli.py)
@@ -92,7 +92,7 @@ class ScreamDetector:
         outputs = []
 
         #Mapping the labels into classes
-        label_mapping = {0: "No Scream Detected", 1: "Scream Detected"}
+        label_mapping = {0: "Scream Not Detected", 1: "Scream Detected"}
 
         # Loop over all files in the directory
         for file_name in os.listdir(directory):
