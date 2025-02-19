@@ -1,3 +1,11 @@
+'''
+server.py
+
+Server code to integrate the Human Scream Detection model with RescueBox
+
+This code allows for the model to be hosted on RescueBox using FlaskML
+'''
+
 import argparse
 import csv
 import random
@@ -46,6 +54,7 @@ class Parameters(TypedDict):
 # Create a server instance
 server = MLServer(__name__)
 
+#Adding the metadata for the Human Scream Detection model
 server.add_app_metadata(
     name="Human Scream Detection",
     author="UMass Rescue",
@@ -60,9 +69,13 @@ model = ScreamDetector('scream_detection_model.onnx')
 def give_prediction(inputs: Inputs, parameters: Parameters) -> ResponseBody:
     input_path = inputs["input_dataset"].path
     out = Path(inputs["output_file"].path)
-    out = str(out / (f"predictions_" + str(int(random.random() * 1000)) + ".csv"))
+    out = str(out / (f"predictions_" + str(int(random.random() * 1000)) + ".csv")) # To prevent file name clashes can be replavced with another system
     print(parameters)
+
+    #Where the model is being classified
     res_list = model.predict_audio_dir(input_path)
+
+    #Adding the output into a csv file which will be added to the specified output directory
     with open(out, mode="w", newline="") as file:
         writer = csv.DictWriter(
             file, fieldnames=["Audio_path", "prediction"]
