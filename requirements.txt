@@ -1,0 +1,12 @@
+ipykernel==5.5.6
+ipython==7.34.0
+numpy==1.26.4
+librosa==0.10.2.post1
+scikit-learn==1.6.1
+tensorflow==2.17.0
+keras==3.8.0
+scipy==1.13.1
+tf2onnx==1.16.0
+onnx==1.16.0
+onnxruntime==1.15.0
+flask_ml==0.2.5
