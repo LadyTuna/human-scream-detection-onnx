@@ -35,6 +35,17 @@ Create a virtual environment using the following commands. The virtual environme
 ```bash
 python -m venv screamDetection
 ```
+Activate the virtual environment as well. For a Linux or Mac OS use
+
+```bash
+source venv/bin/activate
+```
+
+For Windows you can use
+
+```bash
+.\venv\Scripts\activate.bat
+```
 
 Next we use the following command to install the required dependencies
 
@@ -44,6 +55,7 @@ pip install -r requirements.txt
 
 When you clone this repository you will find the trained model in the ONNX format, named _scream_detection_model.onnx_
 
+### Running the project using CLI
 If you'd like to test this project out using the CLI you can use this command
 
 ```bash
@@ -51,6 +63,7 @@ python screamDetector_cli.py --input_dir path/to/audio_dir --output_dir path/to/
 ```
 where audio_dir is the directory that has all the audio's you'd like to be classified and output_dir is the directory where you'd like the output csv to be saved.
 
+### Running the project using Rescue Box Desktop
 To run this application using a GUI we need to download and run [Rescue Box Desktop](https://github.com/UMass-Rescue/RescueBox-Desktop/releases)! You can follow the instructions mentioned in the repo's README.md file
 
 To run the server run the following command
